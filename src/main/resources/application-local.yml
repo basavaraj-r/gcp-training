@@ -1,0 +1,66 @@
+server:
+  port: 8066
+
+spring:
+  application:
+    name: customer-service
+
+  datasource:
+    # H2 Database URL for in-memory or file-based DB
+    url: jdbc:h2:mem:customerdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    # Uncomment the following for a file-based H2 database:
+    # url: jdbc:h2:file:~/customerdb;AUTO_SERVER=TRUE
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+    jpa:
+        hibernate:
+          ddl-auto: create
+        defer-datasource-initialization: true
+
+    sql:
+        init:
+        mode: always
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      idle-timeout: 30000
+      max-lifetime: 600000
+      connection-timeout: 3000
+      pool-name: CustomerHikariPool
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Update schema automatically
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true  # Enable SQL logs for debugging purposes
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,threaddump,loggers
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  metrics:
+    tags:
+      application: customer-service
+
+logging:
+  level:
+    root: INFO
+    com.example.customer: INFO
+    org.springframework.web: INFO
+    com.zaxxer.hikari: DEBUG
+    org.hibernate.SQL: INFO
