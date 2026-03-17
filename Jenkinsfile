@@ -13,6 +13,10 @@ pipeline {
         SONAR_AUTH_TOKEN = "squ_34776fc1f4d8fdb989db5f8bfb704c02db89fa95"
     }
 
+    tools {
+        maven 'Maven3'
+    }
+
     stages {
         stage('Checkout') {
             steps {
